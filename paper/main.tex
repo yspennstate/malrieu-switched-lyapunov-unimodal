@@ -1,0 +1,304 @@
+\documentclass[11pt]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,mathtools,enumitem,booktabs}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+
+\newcommand{\dd}{\,\mathrm{d}}
+
+\hypersetup{pdftitle={The Lyapunov exponent of a randomly switched pair of stable planar systems is unimodal in the switching rate},pdfauthor={Yitzchak Shmalo}}
+
+\title[Unimodality of a switched Lyapunov exponent]{The Lyapunov exponent of a randomly switched pair of stable planar systems is unimodal in the switching rate}
+\author{Yitzchak Shmalo}
+\address{Einstein Institute of Mathematics, The Hebrew University of Jerusalem, Jerusalem, Israel}
+\email{yitzchak.shmalo@gmail.com}
+\date{5 November 2026}
+\subjclass[2020]{60J25, 37H15, 93E15, 65G30}
+\keywords{piecewise deterministic Markov process, switched linear system, Lyapunov exponent, interval arithmetic}
+
+\begin{document}
+\begin{abstract}
+Let $X_t$ solve $\dot X_t=A_{I_t}X_t$ in the plane, where $A_0=\begin{psmallmatrix}-\alpha&1\\0&-\alpha\end{psmallmatrix}$, $A_1=\begin{psmallmatrix}-\alpha&0\\-1&-\alpha\end{psmallmatrix}$ and $I_t$ switches between $0$ and $1$ at rate $r$. Both matrices are Hurwitz, yet for small $\alpha$ the system blows up for an intermediate range of rates. The top Lyapunov exponent has the form $G(r)-\alpha$, and Malrieu conjectured that $G$ increases and then decreases, with a single maximum of height about $0.2$, and tends to zero at both ends. We prove this. The maximum is attained at a single $r_*\in(0.226,0.235)$, $G(r)=r\log(1/r)\,(1+O(1/\log(1/r)))$ as $r\to0$, and $G(r)\le 1/(2r)+(2/\pi)K_1(r)$ for all $r$. Consequently the set of rates for which the system is unstable is an open interval when $\alpha<G(r_*)$ and is empty otherwise. The proof writes $G$ as a ratio of two one-dimensional integrals of an explicit kernel, settles $r\le 0.01$ and $r\ge5$ with elementary and Bessel-function bounds, and covers $[0.01,100]$ by interval arithmetic.
+\end{abstract}
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+Fix $\alpha>0$ and $r>0$ and consider the Markov process $(X_t,I_t)$ on $\mathbb R^2\times\{0,1\}$ with generator
+\begin{equation}\label{eq:gen}
+Lf(x,i)=(A_ix)\cdot\nabla_xf(x,i)+r\bigl(f(x,1-i)-f(x,i)\bigr),\qquad
+A_0=\begin{pmatrix}-\alpha&1\\0&-\alpha\end{pmatrix},\quad A_1=\begin{pmatrix}-\alpha&0\\-1&-\alpha\end{pmatrix}.
+\end{equation}
+Every convex combination $pA_1+(1-p)A_0$ has eigenvalues $-\alpha\pm i\sqrt{p(1-p)}$, so each frozen system is exponentially stable, but Lawley, Mattingly and Reed \cite{LMR} showed that for suitable $\alpha$ the switched system is unstable for an intermediate range of rates. Write $U_t=X_t/|X_t|$. The pair $(U_t,I_t)$ has a unique invariant law $\mu_r$, and almost surely
+\[
+\lim_{t\to\infty}\frac1t\log|X_t|=\sum_{i}\int\langle A_iu,u\rangle\,\mu_r(\mathrm du,i)=G(r)-\alpha,
+\]
+where $G$ does not depend on $\alpha$ and has an explicit integral formula \cite[Theorem 4.1]{Ma}. Malrieu \cite[Conjecture 4.3]{Ma} conjectured from numerical experiments that $G$ is unimodal: there is $r_c$ with $G'>0$ on $(0,r_c)$ and $G'<0$ on $(r_c,\infty)$, $G(r_c)\approx0.2$, and $G(r)\to0$ as $r\to0$ and as $r\to\infty$. He noted that this would make the instability set $\{r>0:G(r)>\alpha\}$ an interval for $\alpha<G(r_c)$ and empty for $\alpha>G(r_c)$, and asked for a proof \cite[Open question 2]{Ma}. For a family of rotation-type pairs, Lagasquie \cite{La} proves that the exponent tends to its frozen value at both ends of the rate axis.
+
+\begin{theorem}\label{thm:main}
+$G$ is continuously differentiable on $(0,\infty)$, and there is $r_*\in(0.226,0.235)$ such that $G'>0$ on $(0,r_*)$ and $G'<0$ on $(r_*,\infty)$. Moreover
+\[
+\frac{\log(1/r)-\gamma}{1+4r^2(1+2K_0(2r))}\ \le\ \frac{G(r)}{r}\ \le\ \log\frac1r+2K_0(2-2r^2)\qquad(0<r<1),
+\]
+where $\gamma$ is Euler's constant, and $G(r)\le \frac1{2r}+\frac2\pi K_1(r)$ for all $r>0$. In particular $G(r)\to0$ at both ends.
+\end{theorem}
+
+Numerically $G(r_*)=0.1985$. The two-sided bound gives $G(r)=r\log(1/r)\,(1+O(1/\log(1/r)))$; the quadrature values are consistent with $G(r)=r\log(1/r)-\gamma r+O(r^3\log^2(1/r))$.
+
+\begin{corollary}\label{cor:interval}
+Let $\alpha>0$. If $\alpha<G(r_*)$, there are $r_1<r_*<r_2$ such that the Lyapunov exponent $G(r)-\alpha$ is positive, and hence $|X_t|\to\infty$ almost surely, exactly for $r\in(r_1,r_2)$, and negative, and hence $|X_t|\to0$ almost surely, for $r\notin[r_1,r_2]$. If $\alpha\ge G(r_*)$, the exponent is negative for every $r\ne r_*$.
+\end{corollary}
+
+This follows from the theorem, since a continuous function that increases strictly, then decreases strictly, and tends to $0$ at both ends has interval superlevel sets.
+
+\begin{remark}\label{rem:scale}
+In \cite{Ma} the maximum is placed at $r_c\approx4.6$, read from Figure~1 there. For the system \eqref{eq:gen} the maximum is at $r_*\approx0.23$. A direct simulation of \eqref{eq:gen} confirms this: integrating the two shear flows exactly over independent exponential holding times of rate $r$, with $2\times10^6$ switches, gives $\frac1T\log|X_T|+\alpha=0.1985$, $0.1081$, $0.0272$, $0.0065$ at $r=0.23$, $1$, $4.6$, $20$, against $G=0.1985$, $0.1083$, $0.0269$, $0.0062$ from the formula of Section~\ref{sec:reduction}. The shape, the height and the two limits are as conjectured.
+\end{remark}
+
+The proof has three parts. Section~\ref{sec:reduction} rewrites $G$ in the coordinate $x=\cot\theta$, uses a symmetry exchanging the two regimes to reduce to $x>0$, and arrives at $G=N_+/D_+$ with
+\begin{equation}\label{eq:ND}
+N_+(r)=\int_0^\infty\Bigl(\frac{x}{1+x^2}-\frac{J(x,r)}x\Bigr)\dd x,\qquad D_+(r)=\int_0^\infty\Bigl(1-J(x,r)+\frac{J(x,r)}{x^2}\Bigr)\dd x,
+\end{equation}
+\begin{equation}\label{eq:J}
+J(x,r)=rx\int_0^1e^{-r\varphi(x,s)}\dd s,\qquad \varphi(x,s)=xs+\frac{s}{x(1-s)}.
+\end{equation}
+Since $G'=(N_+'D_+-N_+D_+')/D_+^2$, the sign of $G'$ is the sign of $H_+=N_+'D_+-N_+D_+'$. Section~\ref{sec:small} proves $H_+>0$ for $r\le0.01$, Section~\ref{sec:large} proves $H_+<0$ for $r\ge5$, and Section~\ref{sec:middle} covers $[0.01,100]$ by validated numerics.
+
+\section{Reduction to a ratio of integrals}\label{sec:reduction}
+
+Since $A_i=-\alpha I+N_i$ with $N_0=\begin{psmallmatrix}0&1\\0&0\end{psmallmatrix}$ and $N_1=\begin{psmallmatrix}0&0\\-1&0\end{psmallmatrix}$, the direction $U_t$ moves by the shears $N_i$ alone, and $\langle A_iu,u\rangle=-\alpha+\langle N_iu,u\rangle$. The law $\mu_r$ is invariant under $u\mapsto-u$, so we may work on the projective line with the coordinate $x=u_1/u_2\in\mathbb R\cup\{\infty\}$. In regime $0$ the flow $\dot u=N_0u$ gives $\dot x=1$, in regime $1$ the flow $\dot u=N_1u$ gives $\dot x=x^2$, and
+\[
+\langle N_0u,u\rangle=\frac{x}{1+x^2},\qquad \langle N_1u,u\rangle=-\frac{x}{1+x^2}.
+\]
+Let $f_0,f_1$ be the densities of the invariant law of $(x,I)$, up to a common factor. They satisfy $-f_0'+r(f_1-f_0)=0$ and $-(x^2f_1)'+r(f_0-f_1)=0$, so the flux $f_0+x^2f_1$ is constant and may be taken equal to $1$. Then
+\begin{equation}\label{eq:G0}
+G(r)=\frac{\int_{\mathbb R}(f_0-f_1)\frac{x}{1+x^2}\dd x}{\int_{\mathbb R}(f_0+f_1)\dd x}.
+\end{equation}
+
+\emph{Symmetry.} The map $\Phi(x,i)=(-1/x,1-i)$ conjugates the dynamics to itself: if $\dot x=1$ then $y=-1/x$ has $\dot y=y^2$, and if $\dot x=x^2$ then $\dot y=1$; the switching rates are equal. By uniqueness, $\Phi$ preserves the invariant law, that is $f_1(y)=f_0(-1/y)/y^2$. The growth rate is also preserved, since $-y/(1+y^2)=x/(1+x^2)$ for $y=-1/x$. The half-line $\{x>0\}$ in regime $i$ is carried onto $\{x<0\}$ in regime $1-i$, so both integrals in \eqref{eq:G0} are twice their restrictions to $x>0$.
+
+\emph{The density on $x>0$.} With $f_1=(1-f_0)/x^2$ the first equation reads $f_0'+r(1+x^{-2})f_0=r/x^2$. Its solutions on $(0,\infty)$ differ by multiples of $e^{-r(x-1/x)}$, which is not integrable at $0$, so
+\[
+f_0(x)=\int_0^x\frac r{y^2}\,e^{-r[(x-y)+(1/y-1/x)]}\dd y=\frac rx\int_0^1\frac{e^{-r\varphi(x,s)}}{(1-s)^2}\dd s,
+\]
+after the substitution $y=x(1-s)$. Since $\partial_s\varphi=x+1/(x(1-s)^2)$ and $\varphi$ increases from $0$ to $\infty$, integrating $r\,\partial_s\varphi\,e^{-r\varphi}$ over $s\in(0,1)$ gives $1=J+f_0$, that is $f_0=1-J$ with $J$ as in \eqref{eq:J}. Put $b=1+x^2$. Then $(f_0-f_1)\frac x{b}=\frac xb-\frac Jx$ and $f_0+f_1=1-J+J/x^2$, which with \eqref{eq:G0} gives $G=N_+/D_+$ with \eqref{eq:ND}.
+
+\begin{lemma}\label{lem:J}
+For $x,r>0$:
+\begin{enumerate}[label=(\alph*)]
+\item $1-e^{-rx}>J>0$ and $J\le x^2/b$;
+\item $\partial_rJ=r\int_0^1\frac{s^2}{(1-s)^2}e^{-r\varphi}\dd s>0$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $\varphi>xs$ gives $J<rx\int_0^1e^{-rxs}\dd s=1-e^{-rx}$. Also $\varphi-sb/x=s^2/(x(1-s))\ge0$, so $J\le rx\int_0^\infty e^{-rsb/x}\dd s=x^2/b$. (b) $\partial_rJ=x\int_0^1(1-r\varphi)e^{-r\varphi}\dd s$, and
+\[
+(1-r\varphi)e^{-r\varphi}=\partial_s\bigl(se^{-r\varphi}\bigr)+r\,(s\partial_s\varphi-\varphi)\,e^{-r\varphi},\qquad s\partial_s\varphi-\varphi=\frac{s^2}{x(1-s)^2}.
+\]
+The term $se^{-r\varphi}$ vanishes at $s=0$ and as $s\to1$.
+\end{proof}
+
+The integrands of \eqref{eq:ND} are nonnegative and integrable by Lemma~\ref{lem:J}(a) and Lemma~\ref{lem:large}(a) below. For $r\in[r_1,r_2]\subset(0,\infty)$, Lemma~\ref{lem:J}(b) gives $0<\partial_rJ(x,r)\le(r_2/r_1)\,\partial_rJ(x,r_1)$, and $\int_0^\infty(1+x^{-2})\,\partial_rJ(x,r_1)\dd x=r_1^{-2}$ by \eqref{eq:e3id} below. This dominates the $r$-derivatives $-\partial_rJ/x$ and $\partial_rJ\,(x^{-2}-1)$ of the integrands, so $N_+$ and $D_+$ are $C^1$ and may be differentiated under the integral sign. Hence $G\in C^1(0,\infty)$ and $\operatorname{sign}G'=\operatorname{sign}H_+$, with
+\begin{equation}\label{eq:H}
+H_+=N_+'D_+-N_+D_+',\qquad N_+'=-\int_0^\infty\frac{\partial_rJ}{x}\dd x,\qquad D_+'=\int_0^\infty\partial_rJ\Bigl(\frac1{x^2}-1\Bigr)\dd x.
+\end{equation}
+
+\section{Small rates}\label{sec:small}
+
+The $x$-integrals against $e^{-r\varphi}=e^{-rs(x+a/x)}$, $a=1/(1-s)$, are Bessel functions:
+\begin{equation}\label{eq:bessel}
+\int_0^\infty x^{\nu-1}e^{-\beta(x+a/x)}\dd x=2a^{\nu/2}K_\nu(2\beta\sqrt a)\qquad(\beta,a>0),
+\end{equation}
+here with $\beta=rs$ and $2\beta\sqrt a=2rs/\sqrt{1-s}$. Put $u=s/\sqrt{1-s}$, which increases from $0$ to $\infty$, with $\dd u=\frac{2-s}{2(1-s)^{3/2}}\dd s$, and write $w=1-s$, so that $u^2w=(1-w)^2$, $0<w\le1$, $w\le u^{-2}$ and $\sqrt w=(1-w)/u$. We use the Mellin formula $\int_0^\infty v^{\mu-1}K_\nu(v)\dd v=2^{\mu-2}\Gamma(\frac{\mu-\nu}2)\Gamma(\frac{\mu+\nu}2)$, the bound $vK_1(v)\le1$, and $K_0'=-K_1$; the last two give $K_0(v)\le K_0(y)+\log(y/v)$ for $0<v\le y$, hence $\int_0^yK_0\le y(1+K_0(y))$.
+
+Let $L=\log(1/r)$ and define $e_1,\dots,e_4$ by
+\[
+rD=2+e_1,\quad N=2L-2\gamma+e_2,\quad r^2D'=-2+e_3,\quad rN'=-2+e_4,
+\]
+where $N=2N_+$ and $D=2D_+$.
+
+\begin{lemma}\label{lem:e}
+For every $r>0$, $e_1,e_2,e_3,e_4>0$, and
+\[
+e_1\le8r^2\bigl(1+2K_0(2r)\bigr),\qquad e_3\le4r^2\bigl(1+2K_0(2\sqrt2\,r)\bigr),\qquad N\le2L+4K_0(2-2r^2)\quad(r<1).
+\]
+\end{lemma}
+
+\begin{proof}
+\emph{$e_1$.} By Fubini and \eqref{eq:bessel} with $\nu=0$, $\int_0^\infty(1-J)\dd x=\int_0^1\frac{2r}{(1-s)^2}K_0\dd s$ and $\int_0^\infty Jx^{-2}\dd x=\int_0^12rK_0\dd s$, the argument of $K_0$ being $2rs/\sqrt{1-s}=2ru$. In the variable $u$,
+\[
+D_+=4r\int_0^\infty u\,\frac{1+w^2}{1-w^2}\,K_0(2ru)\dd u .
+\]
+Since $4r\int_0^\infty uK_0(2ru)\dd u=1/r$, we get $e_1=2rD_+-2=16r^2\int_0^\infty\frac{uw^2}{1-w^2}K_0(2ru)\dd u>0$. Using $1-w=u\sqrt w$, $\frac{uw^2}{1-w^2}=\frac{w^{3/2}}{1+w}\le\min(\frac12,u^{-3})$, so
+\[
+e_1\le16r^2\Bigl(\frac1{4r}\int_0^{2r}K_0+\frac12K_0(2r)\Bigr)\le8r^2\bigl(1+2K_0(2r)\bigr).
+\]
+\emph{$e_2$.} By Lemma~\ref{lem:J}(a), $N_+>\int_0^\infty\bigl(e^{-rx}-\frac1{1+x^2}\bigr)\frac{\dd x}x=L-\gamma$. For the upper bound take $\delta=r^2$; on $s\le1-\delta$, $\varphi\le s(x+1/(x\delta))$, so
+\[
+J\ge\frac{\delta x^2}{1+\delta x^2}\Bigl(1-e^{-r(1-\delta)(x+1/(x\delta))}\Bigr),
+\]
+and
+\[
+N_+\le\int_0^\infty\Bigl(\frac x{1+x^2}-\frac{\delta x}{1+\delta x^2}\Bigr)\dd x+\int_0^\infty e^{-r(1-\delta)(x+1/(x\delta))}\frac{\dd x}x=\frac12\log\frac1\delta+2K_0\bigl(2(1-\delta)r/\sqrt\delta\bigr),
+\]
+which is $L+2K_0(2-2r^2)$.
+
+\emph{$e_3$.} By \eqref{eq:H} and Lemma~\ref{lem:J}(b), with \eqref{eq:bessel} at $\nu=\pm1$,
+\begin{equation}\label{eq:e3id}
+\int_0^\infty\Bigl(1+\frac1{x^2}\Bigr)\partial_rJ\dd x=4r\int_0^\infty u^2K_1(2ru)\dd u=\frac1{r^2},
+\end{equation}
+\[
+I_1:=\int_0^\infty\frac{\partial_rJ}{x^2}\dd x=4r\int_0^\infty\frac{u^2w}{1+w}K_1(2ru)\dd u.
+\]
+Hence $D_+'=2I_1-1/r^2$ and $e_3=4r^2I_1>0$. With $\frac{w}{1+w}\le\min(\frac12,u^{-2})$, splitting at $u=\sqrt2$ and using $u^2K_1(2ru)\le u/(2r)$ on the first piece, $I_1\le1+2K_0(2\sqrt2\,r)$.
+
+\emph{$e_4$.} By \eqref{eq:bessel} at $\nu=0$, $M:=\int_0^\infty\partial_rJ\,x^{-1}\dd x=4r\int_0^\infty\frac{u^2\sqrt w}{1+w}K_0(2ru)\dd u$, and $u^2\sqrt w/(1+w)=u-2uw/(1+w)$. Since $4r\int_0^\infty uK_0(2ru)\dd u=1/r$, $e_4=2-2rM=16r^2\int_0^\infty\frac{uw}{1+w}K_0(2ru)\dd u>0$.
+\end{proof}
+
+\begin{proposition}\label{prop:small}
+$H_+>0$ for $0<r\le0.01$.
+\end{proposition}
+
+\begin{proof}
+Since $H=N'D-ND'=4H_+$, expanding gives exactly
+\[
+\frac{r^2H}4=(L-\gamma-1)+\frac{2e_2+2e_4+e_1e_4-2e_1-e_3N}4\ \ge\ (L-\gamma-1)-\frac{e_1}2-\frac{e_3N}4,
+\]
+by Lemma~\ref{lem:e}. For $r\le0.01$, $K_0(y)\le K_0(1)+\log(1/y)$ with $K_0(1)<0.4211$, and $4K_0(2-2r^2)<0.456$, so Lemma~\ref{lem:e} gives $e_1/2\le4r^2(2L+0.456)$, $e_3\le8r^2L$ and $N\le2L+0.456$. Hence
+\[
+\frac{e_1}2+\frac{e_3N}4\le e^{-2L}(2L+0.456)(2L+4),
+\]
+which is decreasing for $L\ge\log100$ and at most $0.0128$ there, while $L-\gamma-1\ge3.027$.
+\end{proof}
+
+The lower bound in Theorem~\ref{thm:main} for small $r$ is $G=N/D\ge r(2L-2\gamma)/(2+e_1)$, and the upper bound is $G\le rN/2$; both are from Lemma~\ref{lem:e}.
+
+\section{Large rates}\label{sec:large}
+
+\begin{lemma}\label{lem:large}
+For $x,r>0$:
+\begin{enumerate}[label=(\alph*)]
+\item $0\le N_+\le\bar N:=\frac\pi{4r}+K_1(r)$ and $D_+\ge\frac\pi2$;
+\item $\partial_rJ\le\frac{16}{r^2x^3}+xe^{-rx/2}$, so $\int_X^\infty\partial_rJ\dd x\le\frac8{r^2X^2}+e^{-rX/2}\bigl(\frac{2X}r+\frac4{r^2}\bigr)$;
+\item $\int_{1/2}^1\partial_rJ\dd x\ge0.016\,(1-Q)/r^2$, where $Q=e^{-a}(1+a+a^2/2)$, $a=5r/2$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) The integrand of $N_+$ is $\frac1{xb}(x^2-bJ)\ge0$ by Lemma~\ref{lem:J}(a). Write
+\[
+\frac{x^2}b-J=rx\int_0^1e^{-rsb/x}\Bigl(1-e^{-rs^2/(x(1-s))}\Bigr)\dd s+rx\int_1^\infty e^{-rsb/x}\dd s .
+\]
+On $s\le\frac12$ use $1-e^{-c}\le c\le2rs^2/x$; the rest is at most $rx\int_{1/2}^\infty e^{-rsb/x}\dd s=\frac{x^2}be^{-rb/(2x)}$. So $x^2-bJ\le\frac{4x^3}{rb^2}+x^2e^{-rb/(2x)}$. Dividing by $xb$, using $x/b\le\frac12$, $\int_0^\infty x^2b^{-3}\dd x=\pi/16$ and $\int_0^\infty e^{-(r/2)(x+1/x)}\dd x=2K_1(r)$ gives the bound on $N_+$. Since $J\le x^2/b$, $1-J\ge1/b$, so $D_+\ge\int_0^\infty b^{-1}\dd x=\pi/2$.
+
+(b) With $t=s/(1-s)$, $\varphi=\frac{xt}{1+t}+\frac tx$ and $\partial_rJ=r\int_0^\infty\frac{t^2}{(1+t)^2}e^{-r\varphi}\dd t$. For $t\le1$, $\frac{xt}{1+t}\ge\frac{xt}2$; for $t\ge1$, $\frac{xt}{1+t}\ge\frac x2$ and $\frac{t^2}{(1+t)^2}\le1$. So $\partial_rJ\le r\int_0^\infty t^2e^{-rxt/2}\dd t+re^{-rx/2}\int_0^\infty e^{-rt/x}\dd t$.
+
+(c) For $x\in[\frac12,1]$ and $t\in[0,1]$, $\varphi\le t(x+1/x)\le\frac52t$ and $\frac{t^2}{(1+t)^2}\ge\frac{t^2}4$, so $\partial_rJ\ge\frac r4\int_0^1t^2e^{-5rt/2}\dd t=\frac{4(1-Q)}{125\,r^2}$.
+\end{proof}
+
+\begin{proposition}\label{prop:large}
+$H_+<0$ for $r\ge5$.
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:H},
+\[
+-H_+=\int_0^\infty\partial_rJ\,\Bigl[\frac{D_+}x+\frac{N_+}{x^2}-N_+\Bigr]\dd x .
+\]
+The bracket is at least $D_+/x-N_+$, so it is negative only for $x>D_+/N_+\ge X:=(\pi/2)/\bar N$, and there it is at least $-\bar N$. On $[\frac12,1]$ it is at least $\frac\pi2-\bar N$. For $r\ge5$, $\bar N<0.17$ and $X>9$, so by Lemma~\ref{lem:large}
+\[
+-r^2H_+\ \ge\ 0.016\,(1-Q)\Bigl(\frac\pi2-\bar N\Bigr)-\bar N\Bigl(\frac8{X^2}+e^{-rX/2}(2rX+4)\Bigr)=:\ell(r).
+\]
+As $r$ grows, $\bar N$ and $Q$ decrease, $X$ and $rX=\frac\pi2\,r^2/(\frac\pi4+rK_1(r))$ increase, and $v\mapsto e^{-v/2}(2v+4)$ is decreasing; so $\ell$ is increasing. Finally $\ell(5)>0.0089$.
+\end{proof}
+
+With Lemma~\ref{lem:large}(a), $G=N_+/D_+\le2\bar N/\pi=\frac1{2r}+\frac2\pi K_1(r)$.
+
+\section{The middle range}\label{sec:middle}
+
+On $[0.01,100]$ the sign of $G'$ is certified with ball arithmetic in Arb \cite{Arb} through python-flint, at 64 bits of precision. These computations use the formula \eqref{eq:G0} on the whole line, without the symmetry, with $f_0$ written as an integral over $u\in(0,\infty)$ for $x>0$ and over a finite $u$-interval for $x<0$, so they also check the reduction of Section~\ref{sec:reduction}.
+
+For an interval $R=[r_{\rm lo},r_{\rm hi}]$ the parameter enters as a ball, so every enclosure holds for all $r\in R$ at once. The $x$-integrals of $N$, $D$ and of their first and second $r$-derivatives are split into three parts.
+\begin{itemize}
+\item A strip $|x|\le\varepsilon$ with $\varepsilon=10^{-5}\min(r_{\rm lo},1)$. The integrand is smooth but not analytic at $x=0$, since the branch $x<0$ carries $e^{-r(1+x^2)/|x|}$; it is bounded directly (for instance $0\le d\le 2(1+x^2)x^3/r$ for $x>0$, where $d=(1+x^2)f_0-1$).
+\item Tails $|x|\ge X$ with $X=10^4/\min(r_{\rm lo},1)$ (and $10^5/\min(r_{\rm lo},1)$ for the derivatives), bounded by inequalities of the type of Lemma~\ref{lem:large}(b).
+\item Graded panels $[a,2a]$ on each side between $\varepsilon$ and $X$. On each panel the integral is enclosed by the $24$-point Gauss--Legendre rule plus the remainder bound $\frac{64}{15}\,h\,M\rho^{-48}/(\rho^2-1)$ for the Bernstein ellipse $E_\rho$ with $\rho=1.6$ \cite[Theorem 19.3]{Tr}, where $h$ is the half-length and $M$ bounds the integrand on the boundary of $E_\rho$ (maximum modulus), evaluated on $48$ boxes covering it. On these ellipses $|\arg x|<\pi/4$, which keeps the complex continuation of the integrand analytic; its value at a complex $x$ is itself a rigorous Arb integral in $u$, built from $\exp$, $\operatorname{expm1}$ and division only.
+\end{itemize}
+Every strip and tail bound is a sum of powers of $1/r$ and terms $e^{-cr}$, $c>0$, hence decreasing in $r$, and is evaluated at $r_{\rm lo}$.
+
+These give enclosures of $N,D,N',D'$, hence of $G'=(N'D-ND')/D^2$, and of $H'=N''D-ND''$ (the terms $N'D'$ cancel). An interval on which the enclosure does not decide a sign is bisected. The results are in Table~\ref{tab:cert}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lp{0.42\textwidth}l@{}}
+\toprule
+range of $r$ & certified & intervals \\
+\midrule
+$[0.01,0.215]$ & $G'>0$ & 47, ratio $1.08$, bisected \\
+$[0.215,0.25]$ & $H'<0$; $G'>0$ on $[0.215,0.226]$ and $G'<0$ on $[0.235,0.25]$ & 35, width $0.001$ \\
+$[0.25,100]$ & $G'<0$ & 83, ratio $1.08$, bisected \\
+\bottomrule
+\end{tabular}
+\caption{Certified signs. Each range is a contiguous chain of decided intervals.}\label{tab:cert}
+\end{table}
+
+On $[0.215,0.25]$, $H$ is strictly decreasing, so it vanishes at most once there. It is positive at $0.226$ and negative at $0.235$, so $G'$ has exactly one zero $r_*$ in $[0.215,0.25]$, and $r_*\in(0.226,0.235)$.
+
+As an independent check of the code, fifteen decided intervals were recomputed with ordinary adaptive quadrature at both endpoints and the midpoint; the values of $G$ and the central differences of $G$ fell inside the stored enclosures in all $45$ cases.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Proposition~\ref{prop:small} and Table~\ref{tab:cert}, $G'>0$ on $(0,r_*)$; by Table~\ref{tab:cert} and Proposition~\ref{prop:large}, $G'<0$ on $(r_*,\infty)$. The bounds on $G$ are those at the ends of Sections~\ref{sec:small} and~\ref{sec:large}.
+\end{proof}
+
+\section*{Acknowledgements and funding}
+The research presented in this paper was supported by the European Research
+Council (ERC) under the European Union's Horizon Europe research and
+innovation programme (grant agreement No.~101041711), by the Simons
+Foundation as part of the Collaboration on the Mathematical and Scientific
+Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by
+the Israel Science Foundation (grant number 2258/19), and by the Israel
+Science Foundation (ISF Grant 4101/25). Computational resources were
+provided in part by Google Cloud through its education credits program
+(credit 530550103).
+
+\section*{Declaration of competing interest}
+The author holds equity in Heights Labs and in Convex Nexus Capital and
+has a management role at Convex Nexus Capital. These entities are included
+in the funding declaration above.
+
+\section*{Declaration of generative AI and AI-assisted technologies}
+The paper comes out of Math Brain, an ongoing project on the use of AI systems for research mathematics. In November 2026 Claude Opus~5.5 (Anthropic), working in Claude Code, found the proofs of Sections~\ref{sec:reduction}--\ref{sec:large}, wrote and ran the interval computations of Section~\ref{sec:middle} and the simulation of Remark~\ref{rem:scale}, and wrote the paper. The author directed the work and is responsible for the content of the paper and for decisions concerning its dissemination.
+
+\section*{Data availability}
+No data were used. The code for the interval computations, the independent checks and the simulation, with their outputs, is available at\\ \url{https://github.com/yspennstate/malrieu-switched-lyapunov-unimodal}.
+
+\begin{thebibliography}{9}
+
+\bibitem{Arb}
+F.~Johansson, Arb: efficient arbitrary-precision midpoint-radius interval arithmetic, \emph{IEEE Trans. Comput.} \textbf{66} (2017), 1281--1292.
+
+\bibitem{LMR}
+S.~D.~Lawley, J.~C.~Mattingly and M.~C.~Reed, Sensitivity to switching rates in stochastically switched ODEs, \emph{Commun. Math. Sci.} \textbf{12} (2014), no.~7, 1343--1352.
+
+\bibitem{La}
+G.~Lagasquie, A note on simple randomly switched linear systems, arXiv:1612.01861, 2016.
+
+\bibitem{Ma}
+F.~Malrieu, Some simple but challenging Markov processes, \emph{Ann. Fac. Sci. Toulouse Math. (6)} \textbf{24} (2015), no.~4, 857--883. Also arXiv:1412.7516.
+
+\bibitem{Tr}
+L.~N.~Trefethen, \emph{Approximation Theory and Approximation Practice}, extended edition, SIAM, Philadelphia, 2019.
+
+\end{thebibliography}
+
+\end{document}

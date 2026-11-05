@@ -1,0 +1,4 @@
+r=0.23  MC log|X_T|/T = 0.1985  (T=8694120)   g_stable G = 0.1985
+r=1     MC log|X_T|/T = 0.1081  (T=1998242)   g_stable G = 0.1083
+r=4.6   MC log|X_T|/T = 0.0272  (T=435118)   g_stable G = 0.0269
+r=20    MC log|X_T|/T = 0.0065  (T=99958)   g_stable G = 0.0062

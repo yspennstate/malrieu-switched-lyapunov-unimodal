@@ -38,7 +38,7 @@ Fix $\alpha>0$ and $r>0$ and consider the Markov process $(X_t,I_t)$ on $\mathbb
 Lf(x,i)=(A_ix)\cdot\nabla_xf(x,i)+r\bigl(f(x,1-i)-f(x,i)\bigr),\qquad
 A_0=\begin{pmatrix}-\alpha&1\\0&-\alpha\end{pmatrix},\quad A_1=\begin{pmatrix}-\alpha&0\\-1&-\alpha\end{pmatrix}.
 \end{equation}
-Every convex combination $pA_1+(1-p)A_0$ has eigenvalues $-\alpha\pm i\sqrt{p(1-p)}$, so each frozen system is exponentially stable, but Lawley, Mattingly and Reed \cite{LMR} showed that for suitable $\alpha$ the switched system is unstable for an intermediate range of rates. Write $U_t=X_t/|X_t|$. The pair $(U_t,I_t)$ has a unique invariant law $\mu_r$, and almost surely
+Every convex combination $pA_1+(1-p)A_0$ has eigenvalues $-\alpha\pm i\sqrt{p(1-p)}$, so each frozen system is exponentially stable, but Lawley, Mattingly and Reed \cite{LMR} showed that for suitable $\alpha$ the switched system is unstable for an intermediate range of rates. For planar Hurwitz pairs with a convex combination that has a positive eigenvalue, Bena\"im, Le Borgne, Malrieu and Zitt \cite{BLMZ} show that $|X_t|$ may tend to $0$ or to infinity depending on the jump rate. The sign of the exponent of such a linear switched system also governs nonlinear switching between vector fields with a common zero \cite{BS}, and Chitour, Mazanti, Monmarch\'e and Sigalotti \cite{CMMS} compare it with the deterministic maximal Lyapunov exponent of the same matrices. Write $U_t=X_t/|X_t|$. The pair $(U_t,I_t)$ has a unique invariant law $\mu_r$, and almost surely
 \[
 \lim_{t\to\infty}\frac1t\log|X_t|=\sum_{i}\int\langle A_iu,u\rangle\,\mu_r(\mathrm du,i)=G(r)-\alpha,
 \]
@@ -290,6 +290,15 @@ The paper is part of the Math Brain project, whose public repository is \url{htt
 
 \bibitem{Arb}
 F.~Johansson, Arb: efficient arbitrary-precision midpoint-radius interval arithmetic, \emph{IEEE Trans. Comput.} \textbf{66} (2017), 1281--1292.
+
+\bibitem{BLMZ}
+M.~Bena\"im, S.~Le Borgne, F.~Malrieu and P.-A.~Zitt, On the stability of planar randomly switched systems, \emph{Ann. Appl. Probab.} \textbf{24} (2014), no.~1, 292--311.
+
+\bibitem{BS}
+M.~Bena\"im and E.~Strickler, Random switching between vector fields having a common zero, \emph{Ann. Appl. Probab.} \textbf{29} (2019), no.~1, 326--375.
+
+\bibitem{CMMS}
+Y.~Chitour, G.~Mazanti, P.~Monmarch\'e and M.~Sigalotti, On the gap between deterministic and probabilistic Lyapunov exponents for continuous-time linear systems, \emph{Electron. J. Probab.} \textbf{28} (2023), Paper No.~43.
 
 \bibitem{LMR}
 S.~D.~Lawley, J.~C.~Mattingly and M.~C.~Reed, Sensitivity to switching rates in stochastically switched ODEs, \emph{Commun. Math. Sci.} \textbf{12} (2014), no.~7, 1343--1352.
